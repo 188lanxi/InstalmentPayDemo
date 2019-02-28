@@ -20,19 +20,18 @@ public class PayCheckUtil {
      * @throws Exception
      */
     public static Map<String, String> decode(Map<String, String> paramMap) throws Exception {
-        String thirdPrivateKey=ProperrtiesUtil.get("thirdPrivateKey");
-        Base64 base64 = new Base64();
+        String thirdPublicKey=ProperrtiesUtil.get("thirdPublicKey");
         TreeMap<String, String> treeMap = new TreeMap<>();
         for (Map.Entry<String, String> entry : paramMap.entrySet()) {
             String value = entry.getValue();
             value=value.replaceAll(" ","+");
             //解密
-            byte[] decrypt = RSAHexKey.decrypt(thirdPrivateKey, base64.decode(value));
-            treeMap.put(entry.getKey(), new String(decrypt));
+            String decrypt = AesUtil.decrypt(value, ProperrtiesUtil.get("aesKey"));
+            treeMap.put(entry.getKey(),decrypt);
         }
         String sign=treeMap.get("sign");
-        String toSign = SignUtil.toSign(treeMap);
-        if (!sign.equals(toSign)) {
+
+        if (!SignUtil.signVerify(treeMap,thirdPublicKey,sign)) {
             treeMap.put("respCode", "403");
             treeMap.put("respMsg", "签名错误!");
             return treeMap;
@@ -48,19 +47,18 @@ public class PayCheckUtil {
      * @throws Exception
      */
     public static Map<String, String> encrypt(Map<String, String> Map) throws Exception {
-        String lanxiPublicKey=ProperrtiesUtil.get("lanxiPublicKey");
-        Base64 base64 = new Base64();
+        String lanxiPrivateKey=ProperrtiesUtil.get("lanxiPrivateKey");
         TreeMap<String, String> treeMap = new TreeMap<>();
         for (Map.Entry<String, String> entry : Map.entrySet()) {
             treeMap.put(entry.getKey(),entry.getValue());
         }
-        String sign = SignUtil.toSign(treeMap);
+        String sign = SignUtil.toSign(treeMap,lanxiPrivateKey);
         treeMap.put("sign", sign);
         for (Map.Entry<String, String> entry : treeMap.entrySet()) {
             String value = entry.getValue();
             //加密
-            byte[] decrypt = RSAHexKey.encrypt(lanxiPublicKey, value.getBytes());
-            treeMap.put(entry.getKey(),new String(base64.encode(decrypt)));
+            String encrypt = AesUtil.encrypt(value, ProperrtiesUtil.get("aesKey"));
+            treeMap.put(entry.getKey(),encrypt);
         }
         return treeMap;
     }

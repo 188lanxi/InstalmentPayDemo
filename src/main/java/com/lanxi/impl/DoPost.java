@@ -19,7 +19,7 @@ public class DoPost {
     static final Logger log = Logger.getLogger(DoPost.class);
 
     /**
-     * 吊起支付
+     * 调起支付
      *
      * @param orderNo
      * @param payPrice
@@ -32,13 +32,13 @@ public class DoPost {
      * @return
      */
     public static Map<String, String> invokePay(String orderNo,
-                                         String payPrice,
-                                         String frontCallbackUrl,
-                                         String orderTime,
-                                         String secondaryAccount,
-                                         String extendParam,
-                                         String custId,
-                                         String periods) throws Exception {
+                                                String payPrice,
+                                                String frontCallbackUrl,
+                                                String orderTime,
+                                                String secondaryAccount,
+                                                String extendParam,
+                                                String custId,
+                                                String periods) throws Exception {
         String path = ProperrtiesUtil.get("url") + ProperrtiesUtil.get("invokePayPath");
         Map<String, String> map = new HashMap<>();
         map.put("channelNo", ProperrtiesUtil.get("channelNo"));
@@ -71,7 +71,7 @@ public class DoPost {
      * @return
      */
     public static Map<String, String> orderQuery(String orderNo,
-                                          String secondaryAccount) throws Exception {
+                                                 String secondaryAccount) throws Exception {
         String path = ProperrtiesUtil.get("url") + ProperrtiesUtil.get("orderQueryPath");
         Map<String, String> map = new HashMap<>();
         map.put("channelNo", ProperrtiesUtil.get("channelNo"));
@@ -99,9 +99,9 @@ public class DoPost {
      * @return
      */
     public static Map<String, String> orderCorrect(String orderNo,
-                                            BigDecimal correctPrice,
-                                            String secondaryAccount,
-                                            String newOrderNo) throws Exception {
+                                                   BigDecimal correctPrice,
+                                                   String secondaryAccount,
+                                                   String newOrderNo) throws Exception {
         String path = ProperrtiesUtil.get("url") + ProperrtiesUtil.get("orderCorrectPath");
         Map<String, String> map = new HashMap<>();
         map.put("channelNo", ProperrtiesUtil.get("channelNo"));
@@ -130,8 +130,8 @@ public class DoPost {
      * @return
      */
     public static Map<String, String> orderLodgment(String orderNo,
-                                             String lodgmentDate,
-                                             String secondaryAccount) throws Exception {
+                                                    String lodgmentDate,
+                                                    String secondaryAccount) throws Exception {
         String path = ProperrtiesUtil.get("url") + ProperrtiesUtil.get("orderLodgmentPath");
         Map<String, String> map = new HashMap<>();
         map.put("channelNo", ProperrtiesUtil.get("channelNo"));
@@ -161,9 +161,9 @@ public class DoPost {
      * @throws Exception
      */
     public static Map<String, String> orderRefund(String orderNo,
-                                           BigDecimal refundPrice,
-                                           String secondaryAccount,
-                                           String newOrderNo) throws Exception {
+                                                  BigDecimal refundPrice,
+                                                  String secondaryAccount,
+                                                  String newOrderNo) throws Exception {
         String path = ProperrtiesUtil.get("url") + ProperrtiesUtil.get("orderRefundPath");
         Map<String, String> map = new HashMap<>();
         map.put("channelNo", ProperrtiesUtil.get("channelNo"));
@@ -183,12 +183,13 @@ public class DoPost {
         return decode;
     }
 
-    public static void main(String[] args) throws Exception{
-//        Map<String, String> map = invokePay(TimeAssist.todayFull(), "1000", "http://www.baidu.com", TimeAssist.todayFull(), null, "",
-//                "123456", "");
+    public static void main(String[] args) throws Exception {
+        Map<String, String> map = invokePay(TimeAssist.todayFull(), "1000", "http://www.baidu.com", TimeAssist.todayFull(), null, "",
+                "123456", "");
+        System.out.println(map);
 //        Map<String, String> map = orderQuery("123456", null);
 //        Map<String, String> map = orderCorrect("123456", new BigDecimal("100"), null, "c123456");
 //        Map<String, String> map = orderLodgment("123456", "20190104091000", null);
-        Map<String, String> map = orderRefund("123456", new BigDecimal("100"), null, "t123456");
+//        Map<String, String> map = orderRefund("123456", new BigDecimal("100"), null, "t123456");
     }
 }
