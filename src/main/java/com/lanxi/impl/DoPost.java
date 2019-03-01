@@ -55,7 +55,9 @@ public class DoPost {
             map.put("secondaryAccount", secondaryAccount);
         log.info("调起支付参数:" + map);
         Map<String, String> encrypt = PayCheckUtil.encrypt(map);
+        log.info("调起支付加密后参数:" + encrypt);
         String response = HttpUtils.sendPost(path, encrypt, "utf-8");
+        log.info("支付结果未解密:" + response);
         Map<String, String> parse = (Map<String, String>) JSON.parse(response);
         //解密支付结果
         Map<String, String> decode = PayCheckUtil.decode(parse);
@@ -185,7 +187,7 @@ public class DoPost {
 
     public static void main(String[] args) throws Exception {
         Map<String, String> map = invokePay(TimeAssist.todayFull(), "1000", "http://www.baidu.com", TimeAssist.todayFull(), null, "",
-                "123456", "");
+                "123456", null);
         System.out.println(map);
 //        Map<String, String> map = orderQuery("123456", null);
 //        Map<String, String> map = orderCorrect("123456", new BigDecimal("100"), null, "c123456");
